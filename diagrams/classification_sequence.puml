@@ -1,0 +1,29 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Times New Roman
+skinparam defaultFontSize 16
+skinparam dpi 205
+hide footbox
+autonumber
+actor "Оператор" as Operator
+boundary "Вебформа" as Web
+control FastAPI as Api
+participant "Pipeline\nscikit-learn" as Model
+
+Operator -> Web : Вводить текст і надсилає
+Web -> Api : POST /api/classify\n{text}
+Api -> Api : Обрізає пробіли на краях\nі перевіряє текст
+alt Некоректне введення
+  Api --> Web : 422 і пояснення
+  Web --> Operator : Показує помилку, зберігає текст
+else Модель недоступна
+  Api --> Web : 503 і пояснення
+  Web --> Operator : Показує стан
+else Коректний текст і доступна модель
+  Api -> Model : predict([text])
+  Model --> Api : Масив кодів
+  Api --> Web : 200, код та назва категорії
+  Web --> Operator : Показує категорію
+end
+@enduml

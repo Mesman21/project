@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f2f5f4">
+    <title>Класифікатор повідомлень</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#classify">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          Класифікатор повідомлень
+        </a>
+        <nav id="app-navigation" aria-label="Основна навігація" hidden>
+          <a href="#classify">Класифікація</a>
+          <a href="#examples">Приклади</a>
+          <a href="#statistics">Статистика</a>
+        </nav>
+        <div class="header-session" id="header-session" hidden>
+          <span id="account-label"></span>
+          <button class="secondary" type="button" id="logout">Вийти</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container" id="main">
+      <p class="mode-note" id="demo-mode" hidden>Демонстраційний режим</p>
+
+      <section id="login-screen" class="login-screen" hidden>
+        <form class="panel login-form" id="login-form">
+          <h1>Вхід до класифікатора</h1>
+          <label for="login-name">Логін</label>
+          <input id="login-name" autocomplete="username" maxlength="32" required>
+          <label for="login-password">Пароль</label>
+          <input id="login-password" type="password" autocomplete="current-password" maxlength="128" required>
+          <p id="login-feedback" class="feedback" role="status"></p>
+          <button class="primary" type="submit" id="login-submit">Увійти</button>
+        </form>
+      </section>
+
+      <section data-view="classify" hidden>
+        <div class="page-heading">
+          <h1>Класифікація повідомлень</h1>
+          <p>Введіть короткий текст українською, щоб визначити його категорію.</p>
+        </div>
+        <div class="work-grid">
+          <form class="panel" id="classify-form" novalidate>
+            <div class="panel-heading">
+              <h2>Повідомлення</h2>
+              <button type="button" class="text-button" id="insert-example">Вставити приклад</button>
+            </div>
+            <label class="visually-hidden" for="message">Текст повідомлення</label>
+            <textarea id="message" rows="6"
+              placeholder="Наприклад, «Де можна переглянути розклад занять?»"
+              aria-describedby="message-count classify-feedback"></textarea>
+            <div class="field-meta">
+              <span id="classify-feedback" class="feedback" aria-live="polite"></span>
+              <span id="message-count">0 / 2000</span>
+            </div>
+            <div class="actions">
+              <button class="primary" type="submit" id="classify-submit">Класифікувати</button>
+              <button class="secondary" type="button" id="clear-message">Очистити</button>
+            </div>
+          </form>
+          <section class="panel result-panel" aria-labelledby="result-heading">
+            <h2 id="result-heading">Результат</h2>
+            <div id="prediction" class="result-content" role="status">
+              <span class="result-mark" aria-hidden="true">—</span>
+              <strong>Очікується повідомлення</strong>
+              <p>Після класифікації тут з’явиться категорія.</p>
+            </div>
+          </section>
+        </div>
+        <section class="category-guide" aria-labelledby="guide-heading">
+          <h2 id="guide-heading">Категорії повідомлень</h2>
+          <div class="category-grid">
+            <article class="category-tip"><span class="dot information_request"></span><div><h3>Інформаційний запит</h3><p>Питання або прохання надати відомості.</p></div></article>
+            <article class="category-tip"><span class="dot incident_report"></span><div><h3>Повідомлення про збій</h3><p>Опис проблеми, яка вже виникла.</p></div></article>
+            <article class="category-tip"><span class="dot suggestion"></span><div><h3>Пропозиція</h3><p>Ідея зміни або доповнення.</p></div></article>
+          </div>
+        </section>
+      </section>
+
+      <section data-view="examples" hidden>
+        <div class="page-heading">
+          <h1>Розмічені приклади</h1>
+          <p>Переглядайте й редагуйте повідомлення для навчання та перевірки моделі.</p>
+        </div>
+        <div class="examples-grid">
+          <section class="panel" aria-labelledby="examples-heading">
+            <div class="panel-heading">
+              <h2 id="examples-heading">Список прикладів</h2>
+              <span class="small muted" id="examples-count"></span>
+            </div>
+            <label for="example-search">Пошук за текстом</label>
+            <input id="example-search" type="search" placeholder="Введіть слово з повідомлення">
+            <p id="examples-status" class="feedback" role="status"></p>
+            <ul id="example-list" class="example-list"></ul>
+            <template id="example-row">
+              <li class="example-row">
+                <p class="example-text"></p>
+                <div class="row-details">
+                  <span class="tag"></span><span class="split"></span>
+                </div>
+                <div class="row-actions">
+                  <button class="text-button edit-example" type="button">Редагувати</button>
+                  <button class="text-button remove-example" type="button">Видалити</button>
+                </div>
+              </li>
+            </template>
+          </section>
+          <form id="example-form" class="panel example-form" novalidate>
+            <h2 id="example-form-heading">Додати приклад</h2>
+            <label for="example-text">Текст повідомлення</label>
+            <textarea id="example-text" rows="4" aria-describedby="example-feedback"></textarea>
+            <label for="example-category">Категорія</label>
+            <select id="example-category">
+              <option value="information_request">Інформаційний запит</option>
+              <option value="incident_report">Повідомлення про збій</option>
+              <option value="suggestion">Пропозиція</option>
+            </select>
+            <label for="example-split">Вибірка</label>
+            <select id="example-split">
+              <option value="train">Навчальна</option>
+              <option value="test">Перевірна</option>
+            </select>
+            <p id="example-feedback" class="feedback" role="status"></p>
+            <div class="actions">
+              <button id="save-example" class="primary" type="submit">Додати</button>
+              <button id="cancel-edit" class="secondary" type="button" hidden>Скасувати</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section data-view="statistics" hidden>
+        <div class="page-heading">
+          <h1>Статистика оцінювання</h1>
+          <p>Розподіл прогнозів за категоріями на перевірній вибірці.</p>
+        </div>
+        <section class="panel statistics-panel" aria-labelledby="statistics-heading">
+          <div class="panel-heading">
+            <h2 id="statistics-heading">Розподіл прогнозів</h2>
+            <button class="secondary" id="refresh-statistics" type="button">Оновити</button>
+          </div>
+          <p id="statistics-status" class="feedback" role="status"></p>
+          <div id="statistics-data" hidden>
+            <p class="stat-total"><strong id="statistics-total"></strong> повідомлень оцінено</p>
+            <ul id="statistics-list" class="statistics-list"></ul>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <dialog id="delete-dialog" aria-labelledby="delete-heading">
+      <form method="dialog">
+        <h2 id="delete-heading">Видалити приклад?</h2>
+        <p id="delete-text"></p>
+        <div class="actions">
+          <button class="secondary" value="cancel" autofocus>Скасувати</button>
+          <button class="danger" value="confirm">Видалити</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

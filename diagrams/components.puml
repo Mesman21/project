@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Times New Roman
+skinparam defaultFontSize 16
+skinparam dpi 205
+skinparam componentStyle uml2
+component "Вебформа\nHTML / CSS / JavaScript" as Web
+component "Навчання та оцінювання" as Train
+artifact "Розмічені дані\nCSV" as Corpus
+
+package "Локальний сервер" {
+  component "FastAPI" as Api
+  component "Класифікація" as Classifier
+  component "Читання зведення" as Stats
+}
+artifact "Навчений Pipeline\nmodel.joblib" as Model
+artifact "Зведення оцінювання\nstatistics.json" as Summary
+
+Web -down-> Api : HTTP і JSON
+Api -down-> Classifier : прогноз
+Api -down-> Stats : зведення
+Classifier .down.> Model
+Stats .down.> Summary
+Train .right.> Corpus : читає
+Train .up.> Model : записує
+Train .up.> Summary : записує
+@enduml

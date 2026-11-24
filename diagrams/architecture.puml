@@ -1,0 +1,32 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Times New Roman
+skinparam defaultFontSize 16
+skinparam dpi 205
+skinparam componentStyle uml2
+skinparam nodesep 22
+skinparam ranksep 28
+
+node "Робочий комп’ютер Windows 11" as PC {
+  node "Браузер" as Client {
+    component "Вебінтерфейс\nHTML / CSS / JavaScript" as Web
+  }
+  node "Серверний процес Python 3.13" as Server {
+    component "HTTP API\nFastAPI" as Api
+    component "Прогноз і зведення" as Application
+  }
+  folder "Каталог результатів" as Files {
+    artifact "model.joblib\nstatistics.json" as Bundle
+  }
+  node "Окрема локальна команда" as Offline {
+    component "Навчання та оцінювання\nPandas / scikit-learn" as Training
+  }
+  artifact "Розмічені приклади\nCSV" as Data
+}
+Client -down-> Server : HTTP на 127.0.0.1
+Api -down-> Application : Виклики Python
+Server -down-> Files : Читання
+Offline -up-> Files : Запис результатів
+Offline -left-> Data : Читання даних
+@enduml

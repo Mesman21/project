@@ -1,0 +1,14 @@
+{
+  "name": "message-classifier",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --mode mock",
+    "dev:api": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "vite": "^8.0.0"
+  }
+}

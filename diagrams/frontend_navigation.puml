@@ -1,0 +1,22 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Times New Roman
+skinparam defaultFontSize 16
+skinparam dpi 205
+
+skinparam nodesep 16
+skinparam ranksep 20
+rectangle "Спільне меню" as Nav
+rectangle "Класифікація" as Classify
+rectangle "Приклади" as Examples
+rectangle "Статистика" as Stats
+rectangle "Форма додавання\nта редагування" as Form
+rectangle "Підтвердження\nвидалення" as Confirm
+
+Nav --> Classify
+Nav --> Examples
+Nav --> Stats
+Examples --> Form : додати або редагувати
+Examples --> Confirm : видалити
+@enduml

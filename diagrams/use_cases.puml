@@ -1,0 +1,25 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Times New Roman
+skinparam defaultFontSize 16
+skinparam dpi 205
+top to bottom direction
+skinparam nodesep 25
+skinparam ranksep 25
+actor "Оператор" as Operator
+actor "Координатор" as Coordinator
+actor "Фахівець\nіз супроводу" as Maintainer
+rectangle "Система класифікації повідомлень" {
+  usecase "UC-01\nКласифікувати\nповідомлення" as Classify
+  usecase "Перевірити введення" as Validate
+  usecase "UC-02\nВиправити введення" as Correct
+  usecase "UC-03\nПереглянути зведення" as Summary
+  usecase "UC-04\nНавчити й\nоцінити модель" as Train
+}
+Operator -down- Classify
+Coordinator -up- Summary
+Maintainer -down- Train
+Classify .down.> Validate : <<include>>
+Correct .up.> Classify : <<extend>>
+@enduml

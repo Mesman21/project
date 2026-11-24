@@ -1,0 +1,27 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Times New Roman
+skinparam defaultFontSize 16
+skinparam dpi 205
+
+hide circle
+interface TrainingStrategy {
+  +name: str
+  +build_estimator(): BaseEstimator
+}
+class "app.training" as Training <<module>> {
+  +build_pipeline(strategy): Pipeline
+  +train_and_publish(settings, strategy)
+}
+class MultinomialStrategy
+class ComplementStrategy
+class MultinomialNB
+class ComplementNB
+
+Training ..> TrainingStrategy : викликає через контракт
+TrainingStrategy <|.. MultinomialStrategy
+TrainingStrategy <|.. ComplementStrategy
+MultinomialStrategy ..> MultinomialNB : створює
+ComplementStrategy ..> ComplementNB : створює
+@enduml

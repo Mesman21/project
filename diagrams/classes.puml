@@ -1,0 +1,41 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Times New Roman
+skinparam defaultFontSize 16
+skinparam dpi 205
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class ClassificationRequest {
+  +text: str
+}
+class ClassificationResult {
+  +category_code: str
+  +category_name: str
+}
+class EvaluationSummary {
+  +total: int
+  +categories: list<CategoryStatistics>
+}
+class CategoryStatistics {
+  +category_code: str
+  +category_name: str
+  +count: int
+  +share: float
+}
+class Pipeline <<scikit-learn>> {
+  +predict(texts): ndarray
+}
+class api <<module>> {
+  +classify(request: ClassificationRequest): ClassificationResult
+  +statistics(): EvaluationSummary
+}
+
+api ..> ClassificationRequest : приймає
+api ..> ClassificationResult : повертає
+api ..> Pipeline : викликає
+api ..> EvaluationSummary : повертає
+EvaluationSummary "1" *-- "0..3" CategoryStatistics
+@enduml

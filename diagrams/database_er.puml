@@ -1,0 +1,40 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Times New Roman
+skinparam defaultFontSize 16
+skinparam dpi 205
+hide circle
+skinparam classAttributeIconSize 0
+skinparam nodesep 22
+skinparam ranksep 23
+
+entity "Категорія\ncategories" as Category {
+  * category_code <<PK>>
+  --
+  * category_name
+}
+entity "Розмічене повідомлення\nlabeled_messages" as Message {
+  * message_id <<PK>>
+  --
+  * text
+  * category_code <<FK>>
+  * dataset_split
+}
+entity "Запуск оцінювання\nevaluation_runs" as Evaluation {
+  * evaluation_id <<PK>>
+  --
+  * model_version
+  * created_at
+}
+entity "Прогноз\npredictions" as Prediction {
+  * evaluation_id <<PK, FK>>
+  * message_id <<PK, FK>>
+  --
+  * predicted_category_code <<FK>>
+}
+Category ||-down-o{ Message : еталонна мітка
+Category ||--o{ Prediction : мітка прогнозу
+Message ||-right-o{ Prediction : перевірний приклад
+Evaluation ||-down-o{ Prediction : містить
+@enduml
